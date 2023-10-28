@@ -1,75 +1,58 @@
-import java.util.Scanner;
+import java.util.ArrayList;
+
 public class CaesarCipher 
 {
-    private String text;
-    public CaesarCipher()
-    {
+    private int shift;
 
-    }
-    public CaesarCipher(String text)
+    public CaesarCipher(int shift) 
     {
-        this.text=text;
+        this.shift=shift;
     }
-    public String encrypt(int key) 
+    
+    public String encode(String text) 
     {
         StringBuilder result=new StringBuilder();
-        for (char c:text.toCharArray()) 
+        int len=text.length();
+        for(int i=0;i<len;i++) 
         {
-            if(Character.isAlphabetic(c)) 
+            char c=text.charAt(i);
+            if(Character.isLetter(c)) 
             {
                 char base=Character.isUpperCase(c) ? 'A' : 'a';
-                c=(char)(base+(c-base+key)%26);
-            }
-            result.append(c);
-        }
-        return result.toString();
-    }
-    public String decrypt(int key) 
-    {
-        StringBuilder result=new StringBuilder();
-        for(char c:text.toCharArray()) 
-        {
-            if(Character.isAlphabetic(c)) 
-            {
-                char base=Character.isUpperCase(c) ? 'A' : 'a';
-                c=(char)(base+(c-base-key+26)%26);
-            }
-            result.append(c);
-        }
-        return result.toString();
-    }
-
-    public void CaesarCipherStart() 
-    {
-        Scanner scanner=new Scanner(System.in);
-        System.out.print("Enter 'encrypt', 'decrypt', or 'bruteforce': ");
-        String choice=scanner.nextLine();
-        if (choice.equals("encrypt") || choice.equals("decrypt")) 
-        {
-            System.out.println("Enter the key to work with");
-            int key=(scanner.nextInt());
-            if(choice.equals("encrypt")) 
-            {
-                String encryptedText=encrypt(key);
-                System.out.println("Encrypted text: "+encryptedText);
+                char encodedChar=(char)((c-base+shift)%26+base);
+                result.append(encodedChar);
             } 
             else 
             {
-                String decryptedText=decrypt(key);
-                System.out.println("Decrypted text: "+decryptedText);
+                result.append(c);
             }
         }
-        else if(choice.equals("bruteforce")) 
+        return result.toString();
+    }
+    
+    public String encode(String text, int shift) 
+    {
+        this.shift = shift;
+        return encode(text);
+    }
+
+    public String decode(String text) 
+    {
+        return encode(text,26-shift);
+    }
+
+    public ArrayList<String> bruteForceDecode(String text)
+    {
+        ArrayList<String> texts=new ArrayList<String>();
+        for(int i=0;i<26;++i)
         {
-            for (int key=0;key<26;++key) 
-            {
-                String decryptedText=decrypt(key);
-                System.out.println("Key "+key+": "+decryptedText);
-            }
+            texts.add(encode(text,i));
         }
-        else
-        {
-            System.out.println("Invalid choice. Please enter 'encrypt', 'decrypt', or 'bruteforce'.");
-        }
+        return texts;
     }
 }
+
+// Usage:
+// CaesarCipher cipher = new CaesarCipher(3);
+// String encodedText = cipher.encode("Hello, World!");
+// String decodedText = cipher.decode(encodedText);
