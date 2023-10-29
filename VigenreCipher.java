@@ -1,12 +1,10 @@
 public class VigenereCipher 
 {
     private String key;
-
     public VigenereCipher(String key) 
     {
         this.key = key;
     }
-
     public String encode(String text) 
     {
         StringBuilder result=new StringBuilder();
@@ -51,7 +49,6 @@ public class VigenereCipher
         }
         return result.toString();
     }
-
     private char shiftChar(char c,int shift) 
     {
         char base=Character.isUpperCase(c) ? 'A' : 'a';
