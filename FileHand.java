@@ -8,21 +8,19 @@ import java.util.logging.FileHandler;
 
 public class FileHand 
 {
-    FileHand()
-    {
 
-    }
-
-    public void writeToFile(String fileName, String content) 
+    public int writeToFile(String fileName, String content) 
     {
         try(FileWriter fileWriter=new FileWriter(fileName);BufferedWriter bufferedWriter=new BufferedWriter(fileWriter)) 
         {
             bufferedWriter.write(content);
             System.out.println("Data has been written to the file: "+fileName);
+            return 0;
         } 
         catch (IOException e) 
         {
             System.err.println("Error writing to the file: "+ e.getMessage());
+            return -1;
         }
     }
 

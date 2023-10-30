@@ -1,59 +1,68 @@
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 
-public class RSA 
-{
+public class RSA {
     private BigInteger privateKey;
     private BigInteger publicKey;
     private BigInteger modulus;
 
-    public RSA(int bits) 
-    {
-        generateKeys(bits);
+    public RSA(String publicKey) {
+        this.publicKey=new BigInteger(publicKey);
+        generateKeys();
     }
 
-    public void generateKeys(int bits) 
+    public void generateKeys() 
     {
-        SecureRandom random=new SecureRandom();
-        BigInteger p=new BigInteger(bits,100,random);
-        BigInteger q = new BigInteger(bits,100,random);
+        SecureRandom random = new SecureRandom();
+        BigInteger p = new BigInteger(512, 100, random);
+        BigInteger q = new BigInteger(512, 100, random);
 
-        modulus=p.multiply(q);
-        BigInteger phi=p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE)); // phi=(p-1)*(q-1)
+        modulus = p.multiply(q);
+        BigInteger phi = p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE));
 
-        publicKey=new BigInteger("65537"); 
-        privateKey=publicKey.modInverse(phi); // d = n^-1 % phi
+        //publicKey = new BigInteger("65537");
+        privateKey = publicKey.modInverse(phi);
     }
 
-    public BigInteger encrypt(BigInteger message) 
-    {
-        return message.modPow(publicKey,modulus); // c = m ^ pubkey mod n
+    public BigInteger encode(BigInteger message) {
+        return message.modPow(publicKey, modulus);
     }
 
-    public BigInteger decrypt(BigInteger ciphertext) 
-    {
-        return ciphertext.modPow(privateKey,modulus); // m = c ^ privkey(d) mod n
+    public BigInteger decode(BigInteger ciphertext) {
+        return ciphertext.modPow(privateKey, modulus);
     }
 
-    public byte[] textToBytes(String text)
-    {
+    public byte[] textToBytes(String text) {
         return text.getBytes();
     }
 
-    public String bytesToNum(byte[] bytes)
-    {
+    public String bytesToNum(byte[] bytes) {
         return new BigInteger(bytes);
-    } 
-
-    public String encrypt(String plaintext) 
-    {
-        BigInteger encrypted=encrypt(bytesToNum(textToBytes(plaintext)));
-        return encrypted.toString();
     }
 
-    public String decrypt(String ciphertext) 
-    {
-        BigInteger decrypted=decrypt(new BigInteger(ciphertext));
-        return new String(decrypted.toByteArray());
+    /*public String encode(String plaintext) {
+        BigInteger encoded = encode(new BigInteger(plaintext));
+        return encoded.toString();
     }
+
+    public String decode(String ciphertext) {
+        BigInteger decoded = decode(new BigInteger(ciphertext));
+        return decoded.toString();
+    }*/
+
+    // New methods for encoding and decoding using BigInteger
+    public String encodeMessage(String message) {
+        BigInteger messageNum = new BigInteger(message.getBytes());
+        BigInteger encoded = encode(messageNum);
+        return encoded.toString();
+    }
+
+    public String decodeMessage(String ciphertext) {
+    BigInteger decoded = decode(new BigInteger(ciphertext));
+    byte[] bytes = decoded.toByteArray();
+    return new String(bytes, StandardCharsets.UTF_8);
+}
+
+
 }

@@ -4,30 +4,26 @@ public class XorCipher
 
     public XorCipher(String key) 
     {
-        this.key = key;
+        this.key=key;
     }
 
-    public String encrypt(String plaintext) 
+    public String encode(String plaintext) 
     {
         StringBuilder ciphertext=new StringBuilder();
         int len=plaintext.length();
-        for (int i=0;i<len;i++) 
+        for (int i=0;i<len;++i) 
         {
             char plainChar=plaintext.charAt(i);
             char keyChar=key.charAt(i%key.length());
             char encryptedChar=(char)(plainChar^keyChar);
             ciphertext.append(encryptedChar);
         }
-        return ciphertext.toString();
+        return ciphertext.toString().substring(0,len);
     }
 
-    public String decrypt(String ciphertext) 
+    public String decode(String ciphertext) 
     {
-        return encrypt(ciphertext); 
+        return encode(ciphertext); 
     }
 }
 
-// Usage:
-// XorCipher cipher = new XorCipher("SECRET_KEY");
-// String encryptedText = cipher.encrypt("Hello, World!");
-// String decryptedText = cipher.decrypt(encryptedText);
