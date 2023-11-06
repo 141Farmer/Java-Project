@@ -48,8 +48,8 @@ public class Cryptography
             System.out.println("4. Vigenre Decryption");
             System.out.println("5. XOR Encryption");
             System.out.println("6. XOR Decryption");
-            System.out.println("7. RSA Encryption");
-            System.out.println("8. RSA Decryption");
+            System.out.println("7. Rail fence Encryption");
+            System.out.println("8. Rail fence Decryption");
             System.out.println("9. Exit");
             int choice=-1;
             try
@@ -201,20 +201,19 @@ public class Cryptography
                 String plaintext=readInput();
                 if(plaintext==null) continue;
 
-                System.out.println("Enter public key for encryption");
-                String publicKey;
+                System.out.println("Enter rails for encryption");
+                int rails;
                 try
                 {
-                    publicKey=(new Scanner(System.in)).nextLine();
+                    rails=(new Scanner(System.in)).nextInt();
                 }
                 catch(Exception e)
                 {
                     System.out.println(e.getMessage());
                     continue;
                 }
-                RSA rsa=new RSA(publicKey);
-                String ciphertext=rsa.encodeMessage(plaintext);
-                //String n=rsa.
+                RailFenceCipher railFenceCipher=new RailFenceCipher(rails);
+                String ciphertext=railFenceCipher.encode(plaintext);
 
                 if((file.writeToFile(writeInput(),ciphertext))==-1) continue;
             }
@@ -224,19 +223,19 @@ public class Cryptography
                 String plaintext=readInput();
                 if(plaintext==null) continue;
 
-                System.out.println("Enter public key for decryption");
-                String publicKey;
+                System.out.println("Enter rails for decryption");
+                int rails;
                 try
                 {
-                    publicKey=(new Scanner(System.in)).nextLine();
+                    rails=(new Scanner(System.in)).nextInt();
                 }
                 catch(Exception e)
                 {
                     System.out.println(e.getMessage());
                     continue;
                 }
-                RSA rsa=new RSA(publicKey);
-                String ciphertext=rsa.decodeMessage(plaintext);
+                RailFenceCipher railFenceCipher=new RailFenceCipher(rails);
+                String ciphertext=railFenceCipher.decode(plaintext);
 
                 if((file.writeToFile(writeInput(),ciphertext))==-1) continue;
             }

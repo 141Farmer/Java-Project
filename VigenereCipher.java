@@ -55,8 +55,3 @@ public class VigenereCipher
         return (char)((c-base+shift+26)%26+base);
     }
 }
-
-// Usage:
-// VigenereCipher cipher = new VigenereCipher("KEY");
-// String encodedText = cipher.encode("Hello, World!");
-// String decodedText = cipher.decode(encodedText);
