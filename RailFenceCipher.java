@@ -1,89 +1,91 @@
 import java.util.Arrays;
-
 public class RailFenceCipher 
 {
-    private int rails;
-    public RailFenceCipher(int rails) 
+    private int key;
+    public RailFenceCipher(int key)
     {
-        this.rails=rails;
+        this.key=key;
     }
-    public String encode(String plaintext)
-    {
-        char[][] matrix=new char[rails][plaintext.length()];
-        for (int i=0;i<rails;++i)
+	public String encode(String text)
+	{
+		char[][] rail=new char[key][text.length()];
+		for (int i=0;i<key;++i)
         {
-            Arrays.fill(matrix[i], '\n');
+            Arrays.fill(rail[i],'\n');
         }
-        boolean dir=false;
-        int row=0,col=0;
-        for(int i=0;i<plaintext.length();++i) 
+		boolean upDown=false;
+		int row=0,col=0;
+		for(int i=0;i<text.length();++i) 
         {
-            if(row==0||row==rails-1)
-                dir=!dir;
-            matrix[row][col++]=plaintext.charAt(i);
-            if (dir)
-                ++row;
-            else
-                --row;
-        }
-        StringBuilder ciphertext=new StringBuilder();
-        for(int i=0;i<rails;++i)
+			if(row==0 || row==key-1)
+				upDown=!upDown;
+			rail[row][col++]=text.charAt(i);
+			if (upDown)
+				++row;
+			else
+				--row;
+		}
+		StringBuilder result=new StringBuilder();
+		for(int i=0;i<key;++i)
         {
-            for(int j=0;j<plaintext.length();++j)
+            for (int j=0;j<text.length();++j)
             {
-                if(matrix[i][j]!='\n')
-                    ciphertext.append(matrix[i][j]);
+                if(rail[i][j]!='\n')
+                {
+                    result.append(rail[i][j]);
+                }
             }
         }
-        return ciphertext.toString();
-    }
+		return result.toString();
+	}
+	public String decode(String cipher)
+	{
+		char[][] rail=new char[key][cipher.length()];
 
-    public String decode(String ciphertext)
-    {
-        char[][] matrix=new char[rails][ciphertext.length()];
-        for (int i=0;i<rails;++i)
+		for (int i=0;i<key;++i)
         {
-            Arrays.fill(matrix[i], '\n');
+            Arrays.fill(rail[i], '\n');
         }
-        boolean dir=true;
-        int row=0,col=0;
-        for(int i=0;i<ciphertext.length();++i) 
+		boolean upDown=true;
+		int row=0,col=0;
+		for(int i=0;i<cipher.length();++i) 
         {
-            if(row==0)
-                dir=true;
-            if(row==rails-1)
-                dir=false;
-            matrix[row][col++]='$';
-            if(dir)
-                ++row;
-            else
-                --row;
-        }
-        int index=0;
-        for(int i=0;i<rails;++i)
+			if(row==0)
+				upDown=true;
+			if(row==key-1)
+				upDown=false;
+			rail[row][col++]='$';
+			if (upDown)
+				++row;
+			else
+				--row;
+		}
+
+		int index=0;
+		for(int i=0;i<key;++i)
         {
-            for(int j=0;j<ciphertext.length();++j)
+            for(int j=0;j<cipher.length();++j)
             {
-                if(matrix[i][j]=='$'&&index<ciphertext.length())
-                    matrix[i][j]=ciphertext.charAt(index++);
+                if(rail[i][j]=='$'  &&  index<cipher.length())
+					rail[i][j]=cipher.charAt(index++);
             }
         }
-        StringBuilder plaintext=new StringBuilder();
-        row=0;
-        col=0;
-        for(int i=0;i<ciphertext.length();++i) 
+		StringBuilder result=new StringBuilder();
+		row=0;
+		col=0;
+		for(int i=0;i<cipher.length();++i) 
         {
-            if(row==0)
-                dir=true;
-            if(row==rails-1)
-                dir=false;
-            if(matrix[row][col]!='$')
-                plaintext.append(matrix[row][col++]);
-            if(dir)
-                ++row;
-            else
-                --row;
-        }
-        return plaintext.toString();
-    }
+			if(row==0)
+				upDown=true;
+			if(row==key-1)
+				upDown=false;
+			if(rail[row][col]!='$')
+				result.append(rail[row][col++]);
+			if(upDown)
+				++row;
+			else
+				--row;
+		}
+		return result.toString();
+	}
 }

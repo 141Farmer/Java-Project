@@ -17,7 +17,7 @@ public class FileHand
             System.out.println("Data has been written to the file: "+fileName);
             return 0;
         } 
-        catch (IOException e) 
+        catch (Exception e) 
         {
             System.err.println("Error writing to the file: "+ e.getMessage());
             return -1;
@@ -26,7 +26,7 @@ public class FileHand
 
     public String readFromFile(String fileName) 
     {
-        try (FileReader fileReader=new FileReader(fileName);BufferedReader bufferedReader=new BufferedReader(fileReader)) 
+        try(FileReader fileReader=new FileReader(fileName);BufferedReader bufferedReader=new BufferedReader(fileReader)) 
         {
             StringBuilder content=new StringBuilder();
             String line;
@@ -34,7 +34,6 @@ public class FileHand
             {
                 content.append(line).append("\n");
             }
-
             return content.toString();
         } 
         catch (IOException e) 
