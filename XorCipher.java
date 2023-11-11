@@ -1,4 +1,4 @@
-public class XorCipher 
+public class XorCipher implements Cryption
 {
     private String key;
 

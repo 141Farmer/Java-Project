@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class CaesarCipher 
+public class CaesarCipher implements Cryption
 {
     private int shift;
 
@@ -9,6 +9,7 @@ public class CaesarCipher
         this.shift=shift;
     }
     
+    @Override
     public String encode(String text) 
     {
         StringBuilder result=new StringBuilder();

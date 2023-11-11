@@ -1,91 +1,60 @@
-import java.util.Arrays;
-public class RailFenceCipher 
+public class RailFenceCipher implements Cryption
 {
-    private int key;
-    public RailFenceCipher(int key)
-    {
-        this.key=key;
+    private int rails;
+
+    public RailFenceCipher(int rails) 
+	{
+        this.rails=rails;
     }
-	public String encode(String text)
+
+    public String encode(String plainText) 
 	{
-		char[][] rail=new char[key][text.length()];
-		for (int i=0;i<key;++i)
-        {
-            Arrays.fill(rail[i],'\n');
-        }
-		boolean upDown=false;
-		int row=0,col=0;
-		for(int i=0;i<text.length();++i) 
-        {
-			if(row==0 || row==key-1)
-				upDown=!upDown;
-			rail[row][col++]=text.charAt(i);
-			if (upDown)
-				++row;
-			else
-				--row;
-		}
-		StringBuilder result=new StringBuilder();
-		for(int i=0;i<key;++i)
-        {
-            for (int j=0;j<text.length();++j)
-            {
-                if(rail[i][j]!='\n')
-                {
-                    result.append(rail[i][j]);
-                }
+        int row=rails,len=plainText.length();
+        int col=len/rails;
+        char mat[][]=new char[row][col];
+        int index=0;
+        for(int i=0;i<col;++i) 
+		{
+            for(int j=0;j<row;++j) 
+			{
+                if(index!=len)
+                    mat[j][i]=plainText.charAt(index++);
+                else
+                    mat[j][i]='X';
             }
         }
-		return result.toString();
-	}
-	public String decode(String cipher)
-	{
-		char[][] rail=new char[key][cipher.length()];
-
-		for (int i=0;i<key;++i)
-        {
-            Arrays.fill(rail[i], '\n');
-        }
-		boolean upDown=true;
-		int row=0,col=0;
-		for(int i=0;i<cipher.length();++i) 
-        {
-			if(row==0)
-				upDown=true;
-			if(row==key-1)
-				upDown=false;
-			rail[row][col++]='$';
-			if (upDown)
-				++row;
-			else
-				--row;
-		}
-
-		int index=0;
-		for(int i=0;i<key;++i)
-        {
-            for(int j=0;j<cipher.length();++j)
-            {
-                if(rail[i][j]=='$'  &&  index<cipher.length())
-					rail[i][j]=cipher.charAt(index++);
+		StringBuilder cipherText=new StringBuilder();
+        for(int i=0;i<row;++i) 
+		{
+            for(int j=0;j<col;++j) 
+			{
+                cipherText.append(mat[i][j]);
             }
         }
-		StringBuilder result=new StringBuilder();
-		row=0;
-		col=0;
-		for(int i=0;i<cipher.length();++i) 
-        {
-			if(row==0)
-				upDown=true;
-			if(row==key-1)
-				upDown=false;
-			if(rail[row][col]!='$')
-				result.append(rail[row][col++]);
-			if(upDown)
-				++row;
-			else
-				--row;
-		}
-		return result.toString();
-	}
+        return cipherText.toString();
+    }
+
+    public String decode(String cipherText)  
+	{
+        int row=rails,len=cipherText.length();
+        int col=len/rails;
+        char mat[][]=new char[row][col];
+        int index=0;
+        StringBuilder plainText=new StringBuilder();
+        for(int i=0;i<row;++i) 
+		{
+            for(int j=0;j<col;++j) 
+			{
+                mat[i][j]=cipherText.charAt(index++);
+            }
+        }
+        for(int i=0;i<col;++i) 
+		{
+            for(int j=0;j<row;++j) 
+			{
+                plainText.append(mat[j][i]);
+            }
+        }
+        return plainText.toString();
+    }
 }

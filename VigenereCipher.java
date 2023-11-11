@@ -1,4 +1,4 @@
-public class VigenereCipher 
+public class VigenereCipher implements Cryption
 {
     private String key;
     public VigenereCipher(String key) 
