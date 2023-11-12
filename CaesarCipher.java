@@ -9,7 +9,6 @@ public class CaesarCipher implements Cryption
         this.shift=shift;
     }
     
-    @Override
     public String encode(String text) 
     {
         StringBuilder result=new StringBuilder();
@@ -52,8 +51,3 @@ public class CaesarCipher implements Cryption
         return texts;
     }
 }
-
-// Usage:
-// CaesarCipher cipher = new CaesarCipher(3);
-// String encodedText = cipher.encode("Hello, World!");
-// String decodedText = cipher.decode(encodedText);

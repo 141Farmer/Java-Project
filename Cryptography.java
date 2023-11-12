@@ -15,7 +15,6 @@ public class Cryptography
     }
 
 
-
     public String readInput()
     {
         FileHand file=new FileHand();
@@ -51,6 +50,7 @@ public class Cryptography
             System.out.println("7. Rail fence Encryption");
             System.out.println("8. Rail fence Decryption");
             System.out.println("9. Exit");
+            System.out.println();
             int choice=-1;
             try
             {
